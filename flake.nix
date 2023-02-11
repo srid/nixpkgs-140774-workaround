@@ -8,18 +8,16 @@
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = nixpkgs.lib.systems.flakeExposed;
       imports = [ inputs.haskell-flake.flakeModule ];
-      flake.flakeModule = { self, config, lib, ... }: {
-        flake.haskellFlakeProjectModules.fixNixpkgs140774 = { pkgs, ... }: {
-          overrides =
-            let
-              disableSeparateBinOutput =
-                pkgs.haskell.lib.compose.overrideCabal (_: { enableSeparateBinOutput = false; });
-            in
-            self: super: lib.optionalAttrs (pkgs.system == "aarch64-darwin") {
-              ghcid = disableSeparateBinOutput super.ghcid;
-              ormolu = disableSeparateBinOutput super.ormolu;
-            };
-        };
+      flake.haskellFlakeProjectModules.fixNixpkgs140774 = { pkgs, lib, ... }: {
+        overrides =
+          let
+            disableSeparateBinOutput =
+              pkgs.haskell.lib.compose.overrideCabal (_: { enableSeparateBinOutput = false; });
+          in
+          self: super: lib.optionalAttrs (pkgs.system == "aarch64-darwin") {
+            ghcid = disableSeparateBinOutput super.ghcid;
+            ormolu = disableSeparateBinOutput super.ormolu;
+          };
       };
     };
-}
+  }
