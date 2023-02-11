@@ -8,7 +8,7 @@
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = nixpkgs.lib.systems.flakeExposed;
       imports = [ inputs.haskell-flake.flakeModule ];
-      flake.haskellFlakeProjectModules.fixNixpkgs140774 = { pkgs, lib, ... }: {
+      flake.haskellFlakeProjectModules.default = { pkgs, lib, ... }: {
         overrides =
           let
             disableSeparateBinOutput =
@@ -20,4 +20,4 @@
           };
       };
     };
-  }
+}
