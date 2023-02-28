@@ -4,7 +4,7 @@
       disableSeparateBinOutput = pkgs:
         pkgs.haskell.lib.compose.overrideCabal (_: { enableSeparateBinOutput = false; });
       patch = pkgs: p:
-        if pkgs.system == "aarch64-darwin" then disableSeparateBinOutput p else p;
+        if pkgs.system == "aarch64-darwin" then disableSeparateBinOutput pkgs p else p;
     in
     {
       inherit patch;
