@@ -3,14 +3,17 @@
     let
       disableSeparateBinOutput = pkgs:
         pkgs.haskell.lib.compose.overrideCabal (_: { enableSeparateBinOutput = false; });
+      patch = pkgs: p:
+        if pkgs.system == "aarch64-darwin" then disableSeparateBinOutput p else p;
     in
     {
+      inherit patch;
       haskellFlakeProjectModules = {
         default = { pkgs, lib, ... }: {
           overrides =
-            self: super: lib.optionalAttrs (pkgs.system == "aarch64-darwin") {
-              ghcid = disableSeparateBinOutput pkgs super.ghcid;
-              ormolu = disableSeparateBinOutput pkgs super.ormolu;
+            self: super: {
+              ghcid = patch pkgs super.ghcid;
+              ormolu = patch pkgs super.ormolu;
             };
         };
       };
@@ -18,8 +21,8 @@
       # ormolu and ghcid from default package set.
       packages = { pkgs, ... }:
         with pkgs.haskellPackages; {
-          ormolu = disableSeparateBinOutput pkgs ormolu;
-          ghcid = disableSeparateBinOutput pkgs ghcid;
+          ormolu = patch pkgs ormolu;
+          ghcid = patch pkgs ghcid;
         };
     };
 }
