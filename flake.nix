@@ -1,17 +1,17 @@
 {
   outputs = { self }:
     let
-      patch = { pkgs, old, ... }:
+      patch = { pkgs, ... }:
         if pkgs.system == "aarch64-darwin" then { enableSeparateBinOutput = false; } else { };
-      patchDrv = pkgs: pkgs.haskell.lib.compose.overrideCabal (old: patch { inherit pkgs old; });
+      patchDrv = pkgs: pkgs.haskell.lib.compose.overrideCabal (old: patch { inherit pkgs; });
     in
     {
       inherit patch;
       haskellFlakeProjectModules = {
         default = { pkgs, lib, ... }: {
           packageSettings = {
-            ghcid.overrides = patch;
-            ormolu.overrides = patch;
+            ghcid.overrides = patch { inherit pkgs; };
+            ormolu.overrides = patch { inherit pkgs; };
           };
         };
       };
