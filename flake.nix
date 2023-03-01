@@ -6,7 +6,7 @@
       patchDrv = pkgs: pkgs.haskell.lib.compose.overrideCabal (old: patch { inherit pkgs; });
     in
     {
-      inherit patch;
+      inherit patch patchDrv;
       haskellFlakeProjectModules = {
         default = { pkgs, lib, ... }: {
           packageSettings = {
